@@ -1,0 +1,174 @@
+{
+  "scope": "Isolated local PostgreSQL validation; no hosted database claim",
+  "implementationCommit": "48e53b20b78bfd90923e7ce908e4c6e69d4884c3",
+  "schemaCommit": "d48d0b99b5813a717da725d24ec161ce6847fcc6",
+  "runtime": {
+    "node": "24.14.1",
+    "postgresqlMajor": 17
+  },
+  "automatedTests": {
+    "tests": 25,
+    "passed": 25,
+    "failed": 0,
+    "skipped": 0,
+    "fullPinnedWorkloadIncluded": true
+  },
+  "workloadImport": {
+    "schemaVersion": 1,
+    "parserVersion": "team-six-table-v1",
+    "operation": "workload-import",
+    "completedAt": "2026-11-11T20:54:03.240Z",
+    "source": {
+      "name": "Alibaba 2026 spot-GPU jobs",
+      "releaseRef": "3858992ca41bf92082e6d6522ddf0bebd14e838b",
+      "documentationUrl": "https://github.com/alibaba/clusterdata/blob/3858992ca41bf92082e6d6522ddf0bebd14e838b/cluster-trace-v2026-spot-gpu/README.md",
+      "permissionUrl": "https://github.com/alibaba/clusterdata/blob/3858992ca41bf92082e6d6522ddf0bebd14e838b/README.md",
+      "url": "https://raw.githubusercontent.com/alibaba/clusterdata/3858992ca41bf92082e6d6522ddf0bebd14e838b/cluster-trace-v2026-spot-gpu/job_info_df.csv",
+      "sha256": "113ccee4c28f5c3bbaaca974cd164b9280b7d4c39e53b745443b28eea05e03dd",
+      "bytes": 23055929,
+      "rows": 466867
+    },
+    "result": {
+      "sourceSha256": "113ccee4c28f5c3bbaaca974cd164b9280b7d4c39e53b745443b28eea05e03dd",
+      "sourceBytes": 23055929,
+      "releaseRef": "3858992ca41bf92082e6d6522ddf0bebd14e838b",
+      "jobs": 466867,
+      "insertedJobs": 466867,
+      "gpuTypes": 6,
+      "organizations": 84,
+      "exactMappedJobs": 169020,
+      "replayed": false
+    }
+  },
+  "rentalImport": {
+    "schemaVersion": 1,
+    "parserVersion": "team-six-table-v1",
+    "operation": "lium-import",
+    "completedAt": "2026-11-11T20:54:07.025Z",
+    "capture": {
+      "schemaVersion": 1,
+      "source": "lium",
+      "sourceUrl": "https://lium.io/api/public/v1/nodes?include_rented=true",
+      "observedAt": "2026-11-11T20:53:57.364Z",
+      "sha256": "4b5bd5ba72faca6f75e51b075530855847e371ad8e0f97e10c5216a14a33ecd0",
+      "bytes": 538545,
+      "sourceUpdatedAt": "2026-11-11T20:53:11.947726Z",
+      "parserVersion": "team-six-table-v1"
+    },
+    "result": {
+      "source": "lium",
+      "sourceUrl": "https://lium.io/api/public/v1/nodes?include_rented=true",
+      "observedAt": "2026-11-11T20:53:57.364000Z",
+      "sourceUpdatedAt": "2026-11-11T20:53:11.947726Z",
+      "received": 594,
+      "inserted": 594,
+      "replayed": 0,
+      "revisions": 594,
+      "qualityCounts": {
+        "unmapped_gpu": 563
+      }
+    }
+  },
+  "rentalReplay": {
+    "schemaVersion": 1,
+    "parserVersion": "team-six-table-v1",
+    "operation": "lium-import",
+    "completedAt": "2026-11-11T20:54:18.569Z",
+    "capture": {
+      "schemaVersion": 1,
+      "source": "lium",
+      "sourceUrl": "https://lium.io/api/public/v1/nodes?include_rented=true",
+      "observedAt": "2026-11-11T20:53:57.364Z",
+      "sha256": "4b5bd5ba72faca6f75e51b075530855847e371ad8e0f97e10c5216a14a33ecd0",
+      "bytes": 538545,
+      "sourceUpdatedAt": "2026-11-11T20:53:11.947726Z",
+      "parserVersion": "team-six-table-v1"
+    },
+    "result": {
+      "source": "lium",
+      "sourceUrl": "https://lium.io/api/public/v1/nodes?include_rented=true",
+      "observedAt": "2026-11-11T20:53:57.364000Z",
+      "sourceUpdatedAt": "2026-11-11T20:53:11.947726Z",
+      "received": 594,
+      "inserted": 0,
+      "replayed": 594,
+      "revisions": 0,
+      "qualityCounts": {
+        "unmapped_gpu": 563
+      }
+    }
+  },
+  "population": {
+    "schemaVersion": 1,
+    "parserVersion": "team-six-table-v1",
+    "operation": "population-profile",
+    "completedAt": "2026-11-11T20:54:19.316Z",
+    "counts": {
+      "providers": 1,
+      "gpu_models": 1,
+      "offer_revisions": 594,
+      "distinct_source_offers": 594,
+      "rental_observations": 594,
+      "rental_capture_times": 1,
+      "workload_jobs": 466867,
+      "workload_organizations": 84,
+      "workload_gpu_types": 6
+    },
+    "workloadTypes": [
+      {
+        "native_gpu_name": "A10",
+        "exact_gpu_name": null,
+        "mapping_source_url": null,
+        "jobs": 228643
+      },
+      {
+        "native_gpu_name": "A100-SXM4-80GB",
+        "exact_gpu_name": "NVIDIA A100 SXM4 80GB",
+        "mapping_source_url": "https://github.com/alibaba/clusterdata/blob/3858992ca41bf92082e6d6522ddf0bebd14e838b/cluster-trace-v2026-spot-gpu/README.md",
+        "jobs": 169020
+      },
+      {
+        "native_gpu_name": "A800-SXM4-80GB",
+        "exact_gpu_name": null,
+        "mapping_source_url": null,
+        "jobs": 8799
+      },
+      {
+        "native_gpu_name": "GPU-series-1",
+        "exact_gpu_name": null,
+        "mapping_source_url": null,
+        "jobs": 18911
+      },
+      {
+        "native_gpu_name": "GPU-series-2",
+        "exact_gpu_name": null,
+        "mapping_source_url": null,
+        "jobs": 30397
+      },
+      {
+        "native_gpu_name": "H800",
+        "exact_gpu_name": null,
+        "mapping_source_url": null,
+        "jobs": 11097
+      }
+    ],
+    "rentals": {
+      "first_observed_at": "2026-11-11T20:53:57.364Z",
+      "last_observed_at": "2026-11-11T20:53:57.364Z",
+      "available": 153,
+      "unavailable": 441,
+      "unknown_availability": 0,
+      "missing_prices": 0,
+      "exactly_mapped_observations": 31
+    },
+    "overlap": {
+      "jobs_with_any_exact_rental_match": 169020
+    },
+    "interpretation": {
+      "overlap": "Any observed priced exact-hardware match; does not establish freshness, availability, quantity, or feasibility.",
+      "workloadTime": "relative seconds, not UTC",
+      "workloadRequestScope": "unresolved; workers not multiplied",
+      "rentalDatasetMeets100kRecommendation": false
+    }
+  }
+}
