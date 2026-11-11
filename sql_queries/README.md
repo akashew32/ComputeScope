@@ -93,9 +93,3 @@ capture times, unknown availability, non-USD and missing prices, zero-price
 quotes, mode-comparison denominators, spending concentration, and budget/cap
 rejections followed by later selections. These checks used synthetic fixtures;
 the queries have not been benchmarked on the full imported dataset or AWS RDS.
-
-## Attribution
-
-Queries 05–10 and this explanation were drafted with Codex assistance for the
-team's existing six-table schema. Review the assumptions, SQL and results before
-including them in a submission, and disclose assistance as required by the course.
