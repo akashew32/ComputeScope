@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "source": "lium",
+  "sourceUrl": "https://lium.io/api/public/v1/nodes?include_rented=true",
+  "observedAt": "2026-11-12T03:50:48.710Z",
+  "sha256": "656665bc2e1f75d8813bec74d8d6da646287810d1fe8687e832ecb210c857e80",
+  "bytes": 537609,
+  "sourceUpdatedAt": "2026-11-12T03:50:44.706075Z",
+  "parserVersion": "team-six-table-v1"
+}

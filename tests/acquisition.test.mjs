@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtemp, readFile, writeFile, stat, readdir, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
+import { gzipSync } from 'node:zlib';
 import { acquireWorkloadFile, captureLium, downloadBytes, readCapture } from '../lib/acquisition.mjs';
 import { LIUM_NODES_URL } from '../lib/lium.mjs';
 
@@ -27,9 +28,12 @@ test('capture preserves provenance, permissions and the original observation on 
   const dir = await directory(t);
   const first = await captureLium({ directory: dir, observedAt, fetchImpl: respond(payload) });
   assert.equal(first.reused, false);
-  assert.equal((await stat(first.path)).mode & 0o777, 0o600);
-  assert.equal((await stat(`${first.path}.metadata.json`)).mode & 0o777, 0o600);
-  assert.equal((await stat(dir)).mode & 0o777, 0o700);
+  // Windows uses inherited ACLs, not POSIX permission bits.
+  if (process.platform !== 'win32') {
+    assert.equal((await stat(first.path)).mode & 0o777, 0o600);
+    assert.equal((await stat(`${first.path}.metadata.json`)).mode & 0o777, 0o600);
+    assert.equal((await stat(dir)).mode & 0o777, 0o700);
+  }
   assert.deepEqual((await readCapture(first.path)).payload, payload);
   const replay = await captureLium({ directory: dir, observedAt: '2026-11-11T12:01:00.000Z', fetchImpl: respond(payload) });
   assert.equal(replay.reused, true);
@@ -48,6 +52,18 @@ test('replay rejects changed raw bytes and altered provenance', async t => {
   const metadata = { ...result.metadata, sourceUrl: 'https://example.com/not-the-source' };
   await writeFile(`${result.path}.metadata.json`, JSON.stringify(metadata));
   await assert.rejects(readCapture(result.path), /provenance/);
+});
+
+test('compressed captures preserve the original bytes and reject altered data', async t => {
+  const dir = await directory(t);
+  const capture = await captureLium({ directory: dir, observedAt, fetchImpl: respond(payload) });
+  const compressed = `${capture.path}.gz`;
+  const original = await readFile(capture.path);
+  await writeFile(compressed, gzipSync(original));
+  await writeFile(`${compressed}.metadata.json`, await readFile(`${capture.path}.metadata.json`));
+  assert.deepEqual(await readCapture(compressed), await readCapture(capture.path));
+  await writeFile(compressed, gzipSync(Buffer.concat([original, Buffer.from(' ')])));
+  await assert.rejects(readCapture(compressed), /checksum|size/);
 });
 
 test('source microseconds survive replay, and the default observation clock follows receipt', async t => {
