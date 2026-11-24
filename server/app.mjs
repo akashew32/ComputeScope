@@ -2,6 +2,17 @@ import { createServer } from 'node:http';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { createDatabase } from './database.mjs';
+import { getWorkloadSummary, getOrganizationDemand, getWorkloadMarketCoverage, getOrganizationPriceExposure } from './routes-workloads.mjs';
+import { getSpotComparison, getBudgetAllocation } from './routes-scenarios.mjs';
+
+const additionalRoutes = new Map([
+  ['/api/workloads/summary', ['05', getWorkloadSummary]],
+  ['/api/organizations/demand', ['06', getOrganizationDemand]],
+  ['/api/organizations/market-coverage', ['07', getWorkloadMarketCoverage]],
+  ['/api/organizations/price-exposure', ['08', getOrganizationPriceExposure]],
+  ['/api/organizations/spot-comparison', ['09', getSpotComparison]],
+  ['/api/budget-allocation', ['10', getBudgetAllocation]],
+]);
 
 // Read the original queries once. Each handler adds its own filters below.
 function loadSql(file) {
@@ -123,7 +134,7 @@ export function createApiServer({ db, logger = console }) {
       const path = url.pathname;
       const params = url.searchParams;
       const history = path.match(/^\/api\/offers\/([^/]+)\/history$/);
-      if (!['/api/health', '/api/rentals', '/api/gpus', '/api/providers'].includes(path) && !history) {
+      if (!['/api/health', '/api/rentals', '/api/gpus', '/api/providers'].includes(path) && !history && !additionalRoutes.has(path)) {
         return send(response, 404, { error: { code: 'NOT_FOUND', message: 'This route does not exist.' } });
       }
       if (request.method !== 'GET') {
@@ -147,6 +158,10 @@ export function createApiServer({ db, logger = console }) {
       } else if (path === '/api/providers') {
         result = await getProviders(db, params, limit, offset);
         queryId = '03';
+      } else if (additionalRoutes.has(path)) {
+        const [id, handler] = additionalRoutes.get(path);
+        result = await handler(db, params, limit, offset);
+        queryId = id;
       } else {
         let offerId;
         try { offerId = decodeURIComponent(history[1]); } catch { badRequest('Invalid offerId encoding.'); }
