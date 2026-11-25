@@ -35,5 +35,7 @@ and GPU-hour outputs are scenarios, not reservations or historical bills;
 the initial dataset has no available exact matches, so coverage and cost
 results can be empty or null.
 
-`GET /api/health` checks database reachability. See the Milestone 4 API
-specification for each route's returned fields.
+`GET /api/health` checks database reachability. The [Teammate 1 API
+specification](../docs/api/teammate-1.md) documents request and response fields
+for Queries 01-04 and health. The full group specification should also include
+Queries 05-10.
